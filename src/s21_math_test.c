@@ -2,11 +2,12 @@
 #include <math.h>
 #include <stdlib.h>
 #include "s21_math.h"
+#define TOL 1e-7
 
-// Declare the unit test functions
+// s21_abs
 START_TEST(test_abs_positive)
 {
-    int x = 10;
+    int x = INT_MAX;
     int s21_result = s21_abs(x);
     int math_result = abs(x);
     ck_assert_int_eq(s21_result, math_result);
@@ -14,7 +15,7 @@ START_TEST(test_abs_positive)
 
 START_TEST(test_abs_negative)
 {
-    int x = -10;
+    int x = INT_MIN;
     int s21_result = s21_abs(x);
     int math_result = abs(x);
     ck_assert_int_eq(s21_result, math_result);
@@ -31,41 +32,39 @@ START_TEST(test_abs_zero)
 //s21_fmod
 START_TEST(test_fmod_1)
 {
-            int x;
-            int y;
-            int s21_result;
-            int math_result;
+            double x = 999;
+            double y = 9999;
+            long double s21_result = s21_fmod(x, y);
+            long double math_result = fmod(x, y);
 
-            x = 3;
-            y = 5;
-            s21_result = s21_fmod(x, y);
-            math_result = fmod(x, y);
             ck_assert_ldouble_eq(s21_result, math_result);
 }
 
 START_TEST(test_fmod_2)
 {
-            int x;
-            int y;
-            int s21_result;
-            int math_result;
+            double x = 9999;
+            double y = 999;
+            long double s21_result = s21_fmod(x, y);
+            long double math_result = fmod(x, y);
 
-            x = 1234;
-            y = 345;
-            s21_result = s21_fmod(x, y);
-            math_result = fmod(x, y);
             ck_assert_ldouble_eq(s21_result, math_result);
 }
 
 // long double fabs(double x)
 START_TEST(test_fabs_positive)
 {
-    double x = 2548;
-    double s21_result;
-    double math_result;
+    double x = 9999;
+    long double s21_result = s21_fabs(x);
+    long double math_result = fabs(x);
 
-    s21_result = s21_fabs(x);
-    math_result = fabs(x);
+    ck_assert_ldouble_eq(s21_result, math_result); 
+}
+
+START_TEST(test_fabs_negative)
+{
+    double x = -9999;
+    long double s21_result = s21_fabs(x);
+    long double math_result = fabs(x);
 
     ck_assert_ldouble_eq(s21_result, math_result); 
 }
@@ -73,63 +72,55 @@ START_TEST(test_fabs_positive)
 // ceil
 START_TEST(test_ceil_positive)
 {
-    double x;
-    double s21_result;
-    double math_result;
+    double x = 999;
+    long double s21_result = s21_ceil(x);
+    long double math_result = ceil(x);
 
-    x = 2.4;
-    s21_result = s21_ceil(x);
-    math_result = ceil(x);
-
-    ck_assert_ldouble_eq_tol(s21_result, math_result, 1e-6);
+    ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
 }
 
 START_TEST(test_ceil_negative)
 {
-    double x;
-    double s21_result;
-    double math_result;
+    double x = -999;
+    long double s21_result = s21_ceil(x);
+    long double math_result = ceil(x);
 
-    x = -2.4;
-    s21_result = s21_ceil(x);
-    math_result = ceil(x);
-
-    ck_assert_ldouble_eq_tol(s21_result, math_result, 1e-6);
+    ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
 }
 
 // floor
 START_TEST(test_floor_positive)
 {
     double x;
-    double s21_result;
-    double math_result;
+    long double s21_result;
+    long double math_result;
 
     x = 2.4;
     s21_result = s21_floor(x);
     math_result = floor(x);
 
-    ck_assert_ldouble_eq_tol(s21_result, math_result, 1e-6);
+    ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
 }
 
 START_TEST(test_floor_negative)
 {
     double x;
-    double s21_result;
-    double math_result;
+    long double s21_result;
+    long double math_result;
 
     x = -2.4;
     s21_result = s21_floor(x);
     math_result = floor(x);
 
-    ck_assert_ldouble_eq_tol(s21_result, math_result, 1e-6);
+    ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
 }
 
 // s21_pow
 START_TEST(test_pow_positive)
 {
     double x, y;
-    double s21_result;
-    double math_result;
+    long double s21_result;
+    long double math_result;
 
     x = 2345634;
     y = 12341234;
@@ -141,28 +132,18 @@ START_TEST(test_pow_positive)
 
 START_TEST(test_pow_negative_1)
 {
-    double x, y;
-    double s21_result;
-    double math_result;
-
-    x = -2345634;
-    y = 12341234;
-    s21_result = s21_pow(x, y);
-    math_result = pow(x, y);
+    double x = -99999, y = 9999999;
+    long double s21_result = s21_pow(x, y);
+    long double math_result = pow(x, y);
 
     ck_assert_ldouble_eq(s21_result, math_result);
 }
 
 START_TEST(test_pow_negative_2)
 {
-    double x, y;
-    double s21_result;
-    double math_result;
-
-    x = 2345634;
-    y = -12341234;
-    s21_result = s21_pow(x, y);
-    math_result = pow(x, y);
+    double x = 99999, y = -9999999;
+    long double s21_result = s21_pow(x, y);
+    long double math_result = pow(x, y);
 
     ck_assert_ldouble_eq(s21_result, math_result);
 }
@@ -171,52 +152,64 @@ START_TEST(test_pow_negative_2)
 START_TEST(test_exp_positive)
 {
     double x = 12.98;
-    double s21_result = s21_exp(x);
-    double math_result = exp(x);
+    long double s21_result = s21_exp(x);
+    long double math_result = exp(x);
 
-    ck_assert_ldouble_eq_tol(s21_result, math_result, 1e-6);
+    ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
 }
 
 START_TEST(test_exp_negative)
 {
     double x;
-    double s21_result;
-    double math_result;
+    long double s21_result;
+    long double math_result;
 
     x = -12.98;
     s21_result = s21_exp(x);
     math_result = exp(x);
 
-    ck_assert_ldouble_eq_tol(s21_result, math_result, 1e-6);
+    ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
 }
 
-START_TEST(test_cos) {
-    double x;
-    double s21_result;
-    double math_result;
+// s21_cos
+START_TEST(test_cos_positive) {
+    double x = 999;
+    long double s21_result = s21_cos(x);
+    long double math_result = cos(x);
 
-    x = 12;
-    s21_result = s21_cos(x);
-    math_result = cos(x);
-    ck_assert_ldouble_eq_tol(s21_result, math_result, 1e-6);
+    ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
 }
 
-START_TEST(test_sin) {
-    double x;
-    double s21_result;
-    double math_result;
+START_TEST(test_cos_negative) {
+    double x = -999;
+    long double s21_result = s21_cos(x);
+    long double math_result = cos(x);
 
-    x = 12;
-    s21_result = s21_sin(x);
-    math_result = sin(x);
-    ck_assert_ldouble_eq_tol(s21_result, math_result, 1e-6);
+    ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
+}
+
+// s21_sin
+START_TEST(test_sin_positive) {
+    double x = 999;
+    long double s21_result = s21_sin(x);
+    long double math_result = sin(x);
+
+    ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
+}
+
+START_TEST(test_sin_negative) {
+    double x = -999;
+    long double s21_result = s21_sin(x);
+    long double math_result = sin(x);
+
+    ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
 }
 
 // s21_log
 START_TEST(test_sqrt_positive) {
     double x;
-    double s21_result;
-    double math_result;
+    long double s21_result;
+    long double math_result;
 
     x = 999999999999;
     s21_result = s21_sqrt(x);
@@ -226,8 +219,8 @@ START_TEST(test_sqrt_positive) {
 
 START_TEST(test_sqrt_zero) {
     double x;
-    double s21_result;
-    double math_result;
+    long double s21_result;
+    long double math_result;
 
     x = 0;
     s21_result = s21_sqrt(x);
@@ -236,79 +229,60 @@ START_TEST(test_sqrt_zero) {
 }
 
 START_TEST(test_sqrt_negative) {
-    double x;
-    double s21_result;
-    double math_result;
+    double x = -9999999999;
+    long double s21_result = s21_sqrt(x);
+    long double math_result = sqrt(x);
 
-    x = -1;
-    s21_result = s21_sqrt(x);
-    math_result = sqrt(x);
-    ck_assert(isnan(s21_result));
-    ck_assert(isnan(math_result));
+    // Check if both results are NaN
+    ck_assert(isnan(s21_result) && isnan(math_result));
 }
 
 START_TEST(test_log_positive) {
-    double x;
-    double s21_result;
-    double math_result;
+    double x = 99999999;
+    long double s21_result = s21_log(x);
+    long double math_result = log(x);
 
-    x = 4.56;
-    s21_result = s21_log(x);
-    math_result = log(x);
-    ck_assert_ldouble_eq_tol(s21_result, math_result, 1e-6);
+    ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
 }
 
 START_TEST(test_log_negative) {
-    double x;
-    double s21_result;
-    double math_result;
+    double x = -9999999;
+    long double s21_result = s21_log(x);
+    long double math_result = log(x);
 
-    x = -1;
-    s21_result = s21_log(x);
-    math_result = log(x);
-    ck_assert(isnan(s21_result));
-    ck_assert(isnan(math_result));
+    // Check if both results are NaN
+    ck_assert(isnan(s21_result) && isnan(math_result));
 }
 
 START_TEST(test_log_zero) {
-    double x;
-    double s21_result;
-    double math_result;
-
-    x = 0;
-    s21_result = s21_log(x);
-    math_result = log(x);
-    ck_assert(s21_result);
-    ck_assert(math_result);
+    double x = 0;
+    long double s21_result = s21_log(x);
+    long double math_result = log(x);
+    
+    ck_assert_ldouble_eq(s21_result, math_result);
 }
 
 // s21_tan
 START_TEST(test_tan_positive) {
-    double x;
-    double s21_result;
-    double math_result;
+    double x = 31;
+    long double s21_result = s21_tan(x);
+    long double math_result = tan(x);
 
-    x = 2.3;
-    s21_result = s21_tan(x);
-    math_result = tan(x);
-    ck_assert_ldouble_eq(s21_result, math_result);
+    ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
 }
 
 START_TEST(test_tan_negative) {
-    double x;
-    double s21_result;
-    double math_result;
+    double x = -31;
+    long double s21_result = s21_tan(x);
+    long double math_result = tan(x);
 
-    x = -2.3;
-    s21_result = s21_tan(x);
-    math_result = tan(x);
-    ck_assert_ldouble_eq(s21_result, math_result);
+    ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
 }
 
 START_TEST(test_tan_zero) {
     double x;
-    double s21_result;
-    double math_result;
+    long double s21_result;
+    long double math_result;
 
     x = 0;
     s21_result = s21_tan(x);
@@ -318,25 +292,19 @@ START_TEST(test_tan_zero) {
 
 // s21_acos
 START_TEST(test_acos_positive) {
-    double x;
-    long double s21_result;
-    long double math_result;
+    double x = 1;
+    long double s21_result = s21_acos(x);
+    long double math_result = acos(x);
 
-    x = 1;
-    s21_result = s21_acos(x);
-    math_result = acos(x);
-    ck_assert_ldouble_eq_tol(s21_result, math_result, 1e-7);
+    ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
 }
 
 START_TEST(test_acos_negative) {
-    double x;
-    long double s21_result;
-    long double math_result;
+    double x = -1;
+    long double s21_result = s21_acos(x);
+    long double math_result = acos(x);
 
-    x = -1;
-    s21_result = s21_acos(x);
-    math_result = acos(x);
-    ck_assert_ldouble_eq_tol(s21_result, math_result, 1e-7);
+    ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
 }
 
 START_TEST(test_acos_zero) {
@@ -344,7 +312,25 @@ START_TEST(test_acos_zero) {
     long double s21_result = s21_asin(x);
     long double math_result = asin(x);
 
-    ck_assert_ldouble_eq_tol(s21_result, math_result, 1e-7);
+    ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
+}
+
+START_TEST(test_acos_ECase_1) {
+    double x = 2;
+    long double s21_result = s21_asin(x);
+    long double math_result = asin(x);
+
+    // Check if both results are NaN
+    ck_assert(isnan(s21_result) && isnan(math_result));
+}
+
+START_TEST(test_acos_ECase_2) {
+    double x = -2;
+    long double s21_result = s21_asin(x);
+    long double math_result = asin(x);
+
+    // Check if both results are NaN
+    ck_assert(isnan(s21_result) && isnan(math_result));
 }
 
 // s21_asin
@@ -356,18 +342,15 @@ START_TEST(test_asin_positive) {
     x = 1;
     s21_result = s21_asin(x);
     math_result = asin(x);
-    ck_assert_ldouble_eq_tol(s21_result, math_result, 1e-7);
+    ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
 }
 
 START_TEST(test_asin_negative) {
-    double x;
-    long double s21_result;
-    long double math_result;
-
-    x = -1;
-    s21_result = s21_asin(x);
-    math_result = asin(x);
-    ck_assert_ldouble_eq_tol(s21_result, math_result, 1e-7);
+    double x = -1;
+    long double s21_result = s21_asin(x);
+    long double math_result = asin(x);
+    
+    ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
 }
 
 START_TEST(test_asin_zero) {
@@ -375,7 +358,25 @@ START_TEST(test_asin_zero) {
     long double s21_result = s21_asin(x);
     long double math_result = asin(x);
 
-    ck_assert_ldouble_eq_tol(s21_result, math_result, 1e-7);
+    ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
+}
+
+START_TEST(test_asin_ECase_1) {
+    double x = 1.1;
+    long double s21_result = s21_asin(x);
+    long double math_result = asin(x);
+
+    // Check if both results are NaN
+    ck_assert(isnan(s21_result) && isnan(math_result));
+}
+
+START_TEST(test_asin_ECase_2) {
+    double x = -1.1;
+    long double s21_result = s21_asin(x);
+    long double math_result = asin(x);
+
+    // Check if both results are NaN
+    ck_assert(isnan(s21_result) && isnan(math_result));
 }
 
 // s21_atan
@@ -387,7 +388,7 @@ START_TEST(test_atan_positive) {
     x = 1;
     s21_result = s21_atan(x);
     math_result = atan(x);
-    ck_assert_ldouble_eq_tol(s21_result, math_result, 1e-7);
+    ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
 }
 
 // Create the test suite
@@ -405,6 +406,7 @@ Suite* s21_math_suite(void)
     // fabs
     TCase* tc_fabs = tcase_create("fabs");
     tcase_add_test(tc_fabs, test_fabs_positive);
+    tcase_add_test(tc_fabs, test_fabs_negative);
     suite_add_tcase(suite, tc_fabs);
 
     // fmod
@@ -440,12 +442,14 @@ Suite* s21_math_suite(void)
 
     // cos
     TCase* tc_cos = tcase_create("cos");
-    tcase_add_test(tc_cos, test_cos);
+    tcase_add_test(tc_cos, test_cos_positive);
+    tcase_add_test(tc_cos, test_cos_negative);
     suite_add_tcase(suite, tc_cos);
 
     // sin
     TCase* tc_sin = tcase_create("sin");
-    tcase_add_test(tc_sin, test_sin);
+    tcase_add_test(tc_sin, test_sin_positive);
+    tcase_add_test(tc_sin, test_sin_negative);
     suite_add_tcase(suite, tc_sin);
 
     // sqrt
@@ -474,6 +478,8 @@ Suite* s21_math_suite(void)
     tcase_add_test(tc_acos, test_acos_positive);
     tcase_add_test(tc_acos, test_acos_negative);
     tcase_add_test(tc_acos, test_acos_zero);
+    tcase_add_test(tc_acos, test_acos_ECase_1);
+    tcase_add_test(tc_acos, test_acos_ECase_2);
     suite_add_tcase(suite, tc_acos);
 
     // asin
@@ -481,6 +487,8 @@ Suite* s21_math_suite(void)
     tcase_add_test(tc_asin, test_asin_positive);
     tcase_add_test(tc_asin, test_asin_negative);
     tcase_add_test(tc_asin, test_asin_zero);
+    tcase_add_test(tc_asin, test_asin_ECase_1);
+    tcase_add_test(tc_asin, test_asin_ECase_2);
     suite_add_tcase(suite, tc_asin);
 
     // atan
