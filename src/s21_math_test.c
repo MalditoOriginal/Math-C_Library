@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include "s21_math.h"
 #define TOL 1e-7
+#define INT_MIN -2147483648
+#define INT_MAX 2147483647
 
 // s21_abs
 START_TEST(test_abs_positive)
@@ -30,6 +32,16 @@ START_TEST(test_abs_zero)
 }
 
 //s21_fmod
+START_TEST(test_fmod_zero)
+{
+            double x = 999;
+            double y = 0;
+            long double s21_result = s21_fmod(x, y);
+            long double math_result = fmod(x, y);
+
+            ck_assert(isnan(s21_result) && isnan(math_result));
+}
+
 START_TEST(test_fmod_1)
 {
             double x = 999;
@@ -116,16 +128,20 @@ START_TEST(test_floor_negative)
 }
 
 // s21_pow
+START_TEST(test_pow_zero)
+{
+    double x = 2345634, y = 0;
+    long double s21_result = s21_pow(x, y);
+    long double math_result = pow(x, y);
+
+    ck_assert_ldouble_eq(s21_result, math_result);
+}
+
 START_TEST(test_pow_positive)
 {
-    double x, y;
-    long double s21_result;
-    long double math_result;
-
-    x = 2345634;
-    y = 12341234;
-    s21_result = s21_pow(x, y);
-    math_result = pow(x, y);
+    double x = 2345634, y = 12341234;
+    long double s21_result = s21_pow(x, y);
+    long double math_result = pow(x, y);
 
     ck_assert_ldouble_eq(s21_result, math_result);
 }
@@ -205,7 +221,7 @@ START_TEST(test_sin_negative) {
     ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
 }
 
-// s21_log
+// s21_sqrt
 START_TEST(test_sqrt_positive) {
     double x;
     long double s21_result;
@@ -218,13 +234,10 @@ START_TEST(test_sqrt_positive) {
 }
 
 START_TEST(test_sqrt_zero) {
-    double x;
-    long double s21_result;
-    long double math_result;
-
-    x = 0;
-    s21_result = s21_sqrt(x);
-    math_result = sqrt(x);
+    double x = 0;
+    long double s21_result = s21_sqrt(x);
+    long double math_result = sqrt(x);  
+    
     ck_assert_ldouble_eq(s21_result, math_result);
 }
 
@@ -237,6 +250,15 @@ START_TEST(test_sqrt_negative) {
     ck_assert(isnan(s21_result) && isnan(math_result));
 }
 
+START_TEST(test_sqrt_small) {
+    double x = 0.01;
+    long double s21_result = s21_sqrt(x);
+    long double math_result = sqrt(x);  
+    
+    ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
+}
+
+// s21_log
 START_TEST(test_log_positive) {
     double x = 99999999;
     long double s21_result = s21_log(x);
@@ -317,8 +339,8 @@ START_TEST(test_acos_zero) {
 
 START_TEST(test_acos_ECase_1) {
     double x = 2;
-    long double s21_result = s21_asin(x);
-    long double math_result = asin(x);
+    long double s21_result = s21_acos(x);
+    long double math_result = acos(x);
 
     // Check if both results are NaN
     ck_assert(isnan(s21_result) && isnan(math_result));
@@ -326,8 +348,8 @@ START_TEST(test_acos_ECase_1) {
 
 START_TEST(test_acos_ECase_2) {
     double x = -2;
-    long double s21_result = s21_asin(x);
-    long double math_result = asin(x);
+    long double s21_result = s21_acos(x);
+    long double math_result = s21_acos(x);
 
     // Check if both results are NaN
     ck_assert(isnan(s21_result) && isnan(math_result));
@@ -411,6 +433,7 @@ Suite* s21_math_suite(void)
 
     // fmod
     TCase* tc_fmod = tcase_create("fmod");
+    tcase_add_test(tc_fmod, test_fmod_zero);
     tcase_add_test(tc_fmod, test_fmod_1);
     tcase_add_test(tc_fmod, test_fmod_2);
     suite_add_tcase(suite, tc_fmod);
@@ -429,6 +452,7 @@ Suite* s21_math_suite(void)
     
     // pow
     TCase* tc_pow = tcase_create("pow");
+    tcase_add_test(tc_pow, test_pow_zero);
     tcase_add_test(tc_pow, test_pow_positive);
     tcase_add_test(tc_pow, test_pow_negative_1);
     tcase_add_test(tc_pow, test_pow_negative_2);
@@ -457,6 +481,7 @@ Suite* s21_math_suite(void)
     tcase_add_test(tc_sqrt, test_sqrt_positive);
     tcase_add_test(tc_sqrt, test_sqrt_negative);
     tcase_add_test(tc_sqrt, test_sqrt_zero);
+    tcase_add_test(tc_sqrt, test_sqrt_small);
     suite_add_tcase(suite, tc_sqrt);
 
     // log
