@@ -34,7 +34,7 @@ START_TEST(test_abs_zero)
 //s21_fmod
 START_TEST(test_fmod_zero)
 {
-            double x = 999;
+            double x = 999.99999;
             double y = 0;
             long double s21_result = s21_fmod(x, y);
             long double math_result = fmod(x, y);
@@ -42,20 +42,20 @@ START_TEST(test_fmod_zero)
             ck_assert(isnan(s21_result) && isnan(math_result));
 }
 
-START_TEST(test_fmod_1)
+START_TEST(test_fmod_positive)
 {
-            double x = 999;
-            double y = 9999;
+            double x = 123123.13213213;
+            double y = 21313.654659999;
             long double s21_result = s21_fmod(x, y);
             long double math_result = fmod(x, y);
 
             ck_assert_ldouble_eq(s21_result, math_result);
 }
 
-START_TEST(test_fmod_2)
+START_TEST(test_fmod_negative)
 {
-            double x = 9999;
-            double y = 999;
+            double x = -4564564.13212;
+            double y = 999.99999;
             long double s21_result = s21_fmod(x, y);
             long double math_result = fmod(x, y);
 
@@ -65,7 +65,7 @@ START_TEST(test_fmod_2)
 // long double fabs(double x)
 START_TEST(test_fabs_positive)
 {
-    double x = 9999;
+    double x = 9999.9999;
     long double s21_result = s21_fabs(x);
     long double math_result = fabs(x);
 
@@ -74,7 +74,7 @@ START_TEST(test_fabs_positive)
 
 START_TEST(test_fabs_negative)
 {
-    double x = -9999;
+    double x = -9999.99999;
     long double s21_result = s21_fabs(x);
     long double math_result = fabs(x);
 
@@ -84,7 +84,7 @@ START_TEST(test_fabs_negative)
 // ceil
 START_TEST(test_ceil_positive)
 {
-    double x = 999;
+    double x = 999.12341234312;
     long double s21_result = s21_ceil(x);
     long double math_result = ceil(x);
 
@@ -93,7 +93,7 @@ START_TEST(test_ceil_positive)
 
 START_TEST(test_ceil_negative)
 {
-    double x = -999;
+    double x = -999.34252345;
     long double s21_result = s21_ceil(x);
     long double math_result = ceil(x);
 
@@ -189,7 +189,7 @@ START_TEST(test_exp_negative)
 
 // s21_cos
 START_TEST(test_cos_positive) {
-    double x = 999;
+    double x = 13223.165456411;
     long double s21_result = s21_cos(x);
     long double math_result = cos(x);
 
@@ -197,7 +197,7 @@ START_TEST(test_cos_positive) {
 }
 
 START_TEST(test_cos_negative) {
-    double x = -999;
+    double x = -65456.65456465;
     long double s21_result = s21_cos(x);
     long double math_result = cos(x);
 
@@ -206,7 +206,7 @@ START_TEST(test_cos_negative) {
 
 // s21_sin
 START_TEST(test_sin_positive) {
-    double x = 999;
+    double x = 646545.146546546;
     long double s21_result = s21_sin(x);
     long double math_result = sin(x);
 
@@ -214,7 +214,7 @@ START_TEST(test_sin_positive) {
 }
 
 START_TEST(test_sin_negative) {
-    double x = -999;
+    double x = -23132.146548465;
     long double s21_result = s21_sin(x);
     long double math_result = sin(x);
 
@@ -227,7 +227,7 @@ START_TEST(test_sqrt_positive) {
     long double s21_result;
     long double math_result;
 
-    x = 999999999999;
+    x = 9999999999.99999999;
     s21_result = s21_sqrt(x);
     math_result = sqrt(x);
     ck_assert_ldouble_eq(s21_result, math_result);
@@ -242,7 +242,7 @@ START_TEST(test_sqrt_zero) {
 }
 
 START_TEST(test_sqrt_negative) {
-    double x = -9999999999;
+    double x = -9999999999.99999999;
     long double s21_result = s21_sqrt(x);
     long double math_result = sqrt(x);
 
@@ -260,7 +260,7 @@ START_TEST(test_sqrt_small) {
 
 // s21_log
 START_TEST(test_log_positive) {
-    double x = 99999999;
+    double x = 99999999.31243214123;
     long double s21_result = s21_log(x);
     long double math_result = log(x);
 
@@ -268,7 +268,7 @@ START_TEST(test_log_positive) {
 }
 
 START_TEST(test_log_negative) {
-    double x = -9999999;
+    double x = -9999999.123413243124;
     long double s21_result = s21_log(x);
     long double math_result = log(x);
 
@@ -434,8 +434,8 @@ Suite* s21_math_suite(void)
     // fmod
     TCase* tc_fmod = tcase_create("fmod");
     tcase_add_test(tc_fmod, test_fmod_zero);
-    tcase_add_test(tc_fmod, test_fmod_1);
-    tcase_add_test(tc_fmod, test_fmod_2);
+    tcase_add_test(tc_fmod, test_fmod_positive);
+    tcase_add_test(tc_fmod, test_fmod_negative);
     suite_add_tcase(suite, tc_fmod);
 
     //ceil

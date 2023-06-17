@@ -32,6 +32,8 @@ long double s21_pow(double base, double exp) {
 long double s21_fmod(double x, double y)
 {
     long double result;  // Declare the variable for the result
+    x = (long double)x;
+    y = (long double)y;
 
     if (y == 0.0) {
         // Handle division by zero error
@@ -42,11 +44,6 @@ long double s21_fmod(double x, double y)
 
         // Calculate the remainder
         long double remainder = x - (intPart * y);
-
-        // Handle negative remainders
-        if (remainder < 0.0) {
-            remainder += y;
-        }
 
         result = remainder;
     }
@@ -142,18 +139,14 @@ long double s21_sqrt(double x) {
     int iteration = 0; // Current iteration
     
     while (s21_fabs(result * result - x) > EPSILON && iteration < max_iterations) {
-        double next = 0.5 * (result + x / result); // Calculate the next approximation
+        double root = 0.5 * (result + x / result); // Calculate the next approximation
         
-        if (s21_fabs(next - result) < EPSILON) {}
-        
-        result = next; // Update the current approximation
+        result = root; // Update the current approximation
         iteration++; // Increment the iteration counter
     }
     
     return result;
 }
-
-
 
 // s21_tan
 long double s21_tan(double x) {
