@@ -1,35 +1,33 @@
-CC := -Wall -Werror -Wextra -std=c11
+CC = -Wall -Werror -Wextra -std=c11
 OS := $(shell uname)
-SRC := s21_math.c
-OBJ := s21_math.o
 
-ifeq ($(OS), Linux)
-FLAGS = -lcheck -lm -lpthread
+ifeq ($(OS),Linux)
+FLAGS = -lcheck -lm -lpthread -lrt -lsubunit -fprofile-arcs -ftest-coverage
+else
+FLAGS = -lcheck -lm -lpthread -fprofile-arcs -ftest-coverage
 endif
-PROFILE_FLAGS = -fprofile-arcs -ftest-coverage
-COV_LIBS = -lgcov -coverage
 
-all: clean s21_math.a
+all: clean s21_math.a test gcov_report
 
-test:
-	gcc s21_math_test.c s21_math.a -lcheck -lm -lpthread $(COV_LIBS) -o s21_test_math
-	./s21_test_math
+test: clean s21_math.a
+	gcc s21_math_test.c s21_math.a $(FLAGS) -o s21_math_test
+	./s21_math_test
 
-s21_math.a: s21_math.o
-	ar -crs s21_math.a s21_math.o ${OBJ}
+s21_math.a:
+	gcc $(CC) -c s21_math.c
+	ar -crs s21_math.a s21_math.o
 
-s21_math.o:
-	gcc $(CC) $(PROFILE_FLAGS) -c s21_math.c
-
-gcov_report:
-	lcov -t "gcov_report"  -o report.info --no-external -c -d .
-	genhtml -o ./report report.info
+gcov_report: clean
+	gcc s21_math_test.c s21_math.c $(FLAGS) -o s21_math_test
+	./s21_math_test
+	lcov -t "./s21_math_test"  -o report.info --no-external -c -d .
+	genhtml -o report report.info
 	open ./report/index.html
 
 	rm -rf *.gcno *gcda *.gco
 
 clean:
-	rm -rf *.o *.a *.out s21_test_math
+	rm -rf *.o *.a s21_math_test
 	rm -rf *.gcno *gcda *.gcov gcov
 	rm -rf report report.info
 
