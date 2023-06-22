@@ -2,13 +2,14 @@
 #define S21_MATH_H
 #define E 2.7182818284590452353602874713527L
 #define PI 3.141592653589793238462643383279502884L
-#define EPSILON 1e-15
+#define EPSILON 1e-16
 #define PRECISION 0.9999999999
 #define NEG_INF -1.0 / 0.0
 #define POS_INF +1.0 / 0.0
 #define PRECISION_TERM 200
+#define S21_NAN 0.0 / 0.0
 
-long double s21_nan();
+long double s21_isnan(double x);
 
 int s21_abs(int x);
 long double s21_fabs(double x);

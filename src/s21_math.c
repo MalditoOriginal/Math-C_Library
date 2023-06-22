@@ -1,10 +1,6 @@
 #include "s21_math.h"
 
-long double s21_nan() { 
-  return 0.0 / 0.0; // Return NaN 
-}
-
-int s21_isnan(long double x) {
+long double s21_isnan(double x) {
   // Compare the value against itself to check if it's NaN
   return x != x;
 }
@@ -23,18 +19,20 @@ long double s21_pow(double base, double exp) {
 
   if (s21_isnan(base) || s21_isnan(exp)) {
     if (s21_isnan(base) && s21_isnan(exp)) {
-      result = s21_nan(); // Both base and exponent are NaN
+      result = S21_NAN; // Both base and exponent are NaN
     } else {
-      result = s21_nan(); // Either base or exponent is NaN
+      result = S21_NAN; // Either base or exponent is NaN
     }
-  } else if (exp == NEG_INF) {
-    result = 0.0; // Exponent is negative infinity, result is 0
-  } else if (exp == POS_INF) {
-    result = POS_INF; // Exponent is positive infinity, result is positive infinity
-  } else if (exp < 0) {
-    result = 1.0 / s21_pow(base, -exp);  // Handle negative exponent
+  } else if ((base == NEG_INF) && (exp == POS_INF)) {
+    result = POS_INF; // Both base and exponent are negative infinity
+  } else if ((base == NEG_INF) && (exp == NEG_INF)) {
+    result = 0.0; // Both base and exponent are negative infinity
+  } else if (base < 0 && exp != 0 && s21_fmod(exp, 1.0) != 0.0) {
+    result = S21_NAN; // Negative base and fractional exponent
   } else if (exp == 0) {
     result = 1.0;
+  } else if (exp < 0) {
+    result = 1.0 / s21_pow(base, -exp);
   } else {
     result = 1.0;
     for (int i = 0; i < exp; i++) {
@@ -51,13 +49,16 @@ long double s21_fmod(double x, double y) {
   x = (long double)x;
   y = (long double)y;
 
-  if (y == 0.0) {
-    // Handle division by zero error
-    result = s21_nan();
-  } else {
+  if (y == POS_INF || y == NEG_INF) {
+    if (x == POS_INF || x == NEG_INF) {
+      result = S21_NAN; // Handle division of infinities, result is NaN
+    } else {
+      result = x; // y is infinity, return x
+    }
+  } else if (y == 0.0) result = S21_NAN;
+  else {
     long double quotient = x / y;
-    long double intPart =
-        (long long)quotient;  // Get the integer part of the quotient
+    long double intPart = (long long)quotient;  // Get the integer part of the quotient
 
     // Calculate the remainder
     long double remainder = x - (intPart * y);
@@ -68,11 +69,12 @@ long double s21_fmod(double x, double y) {
   return result;
 }
 
+
 long double s21_ceil(double x) {
   long double result;
   
   if (s21_isnan(x)) {
-    result = s21_nan(); // Return NaN if x is NaN
+    result = S21_NAN; // Return NaN if x is NaN
   } else if (x >= 0.0) {
     result = (long double)((long long)(x + PRECISION));  // Adding a small value to handle floating-point precision
   } else {
@@ -87,7 +89,7 @@ long double s21_floor(double x) {
   long double result;
 
   if (s21_isnan(x)) {
-    result = s21_nan(); // Return NaN if x is NaN
+    result = S21_NAN; // Return NaN if x is NaN
   } else if (x >= 0.0) {
     result = (long double)((long long)x);
   } else {
@@ -102,18 +104,23 @@ long double s21_floor(double x) {
 
 // s21_exp
 long double s21_exp(double x) {
+  x = (long double)x;
   long double result = 1.0;
   long double term = 1.0;
 
   if (s21_isnan(x)) {
-    result = s21_nan(); // Return NaN if x is NaN
+    result = S21_NAN; // Return NaN if x is NaN
   }
 
-  if (x > 0) {
+  if (x >= 710) {
+    result = POS_INF;
+  }
+  if (x > 0.0) {
     for (int n = 1; s21_fabs(term) >= EPSILON; n++) {
       term *= x / n;   // Series expansions
       result += term;  // Sum of all terms
     }
+
   } else {
     for (double i = 0.0; i > x; i -= 1.0) {
       result /= E;
@@ -128,11 +135,11 @@ long double s21_log(double x) {
   long double returnValue;  // Declare variable for the return value
 
   if (s21_isnan(x)) {
-    result = s21_nan(); // Return NaN if x is NaN
+    result = S21_NAN; // Return NaN if x is NaN
   }
 
   if (x < 0) {
-    returnValue = s21_nan();
+    returnValue = S21_NAN;
   } else if (x == 0) {
     returnValue = NEG_INF;
   } else {
@@ -158,7 +165,7 @@ long double s21_sqrt(double x) {
   double result = x;  // Initial guess for the result
 
   if (x < 0) {
-    result = s21_nan();
+    result = S21_NAN;
   }
 
   int max_iterations = 100;  // Maximum number of iterations
@@ -224,7 +231,7 @@ long double s21_asin(double x) {
   long double result;
 
   if (x > 1.0 || x < -1.0) {
-    result = s21_nan();
+    result = S21_NAN;
   } else {
     long double guess = x;  // Initial guess for the root
     long double delta;      // Change in guess
@@ -246,10 +253,13 @@ long double s21_asin(double x) {
 // s21_acos
 long double s21_acos(double x) {
   long double result;
+  
   if (x > 1.0 || x < -1.0) {
-    result = s21_nan();
+    result = S21_NAN;
   }
-  result = (PI / 2) - s21_asin(x);
+  if (x == 1) {result = 0.0; }
+  else 
+  {result = (PI / 2) - s21_asin(x); }
   return result;
 }
 
