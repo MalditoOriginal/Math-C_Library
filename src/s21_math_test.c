@@ -350,13 +350,10 @@ START_TEST(test_tan_negative) {
 END_TEST
 
 START_TEST(test_tan_zero) {
-  double x;
-  long double s21_result;
-  long double math_result;
+  double x = 0;
+  long double s21_result = s21_tan(x);
+  long double math_result = tan(x);
 
-  x = 0;
-  s21_result = s21_tan(x);
-  math_result = tan(x);
   ck_assert_ldouble_eq(s21_result, math_result);
 }
 END_TEST
@@ -563,6 +560,7 @@ Suite* s21_math_suite(void) {
 
   // tan
   TCase* tc_tan = tcase_create("tan");
+  tcase_add_test(tc_tan, test_tan_zero);
   tcase_add_test(tc_tan, test_tan_positive);
   tcase_add_test(tc_tan, test_tan_negative);
   tcase_add_test(tc_tan, test_tan_zero);

@@ -135,7 +135,7 @@ long double s21_log(double x) {
 
 // s21_sqrt
 long double s21_sqrt(double x) {
-if (s21_isnan(x)) return S21_NAN;
+  if (s21_isnan(x)) return S21_NAN;
 
   double result = x;  // Initial guess for the result
   long int max_iterations = 100;
@@ -172,7 +172,7 @@ long double s21_sin(double x) {
 // s21_cos
 long double s21_cos(double x) {
   // Adjust the input angle to the range [-2*PI, 2*PI]
-x = s21_fmod(x, 2 * PI);
+  x = s21_fmod(x, 2 * PI);
 
   // Compute the cosine using the Taylor series expansion
   long double result = 1.0;  // Initial term of the series
