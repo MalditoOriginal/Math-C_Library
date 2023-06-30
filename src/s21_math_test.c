@@ -3,9 +3,33 @@
 #include <check.h>
 #include <math.h>
 #include <stdlib.h>
-#define TOL 1e-7
+#define TOL 1e-8
 #define INT_MIN -2147483648
 #define INT_MAX 2147483647
+
+// test_nan
+START_TEST(test_nan) {
+  ck_assert_ldouble_nan(s21_pow(NAN, NAN));
+  ck_assert_ldouble_nan(pow(NAN, NAN));
+  ck_assert_ldouble_nan(s21_pow(-1, 5.6));
+  ck_assert_ldouble_nan(pow(-1, 5.6));
+  ck_assert_ldouble_nan(s21_fmod(INFINITY, INFINITY));
+  ck_assert_ldouble_nan(fmod(INFINITY, INFINITY));
+  ck_assert_ldouble_eq(s21_fmod(46, INFINITY), fmod(46, INFINITY));
+  ck_assert_ldouble_nan(s21_ceil(NAN));
+  ck_assert_ldouble_nan(ceil(NAN));
+  ck_assert_ldouble_nan(s21_floor(NAN));
+  ck_assert_ldouble_nan(floor(NAN));
+}
+END_TEST
+
+// test_inf
+START_TEST(test_inf) {
+  ck_assert_ldouble_eq(s21_pow(-INFINITY, INFINITY), pow(-INFINITY, INFINITY));
+  ck_assert_ldouble_eq(s21_pow(-INFINITY, -INFINITY),
+                       pow(-INFINITY, -INFINITY));
+}
+END_TEST
 
 // s21_abs
 START_TEST(test_abs_positive) {
@@ -139,7 +163,7 @@ START_TEST(test_pow_zero) {
 END_TEST
 
 START_TEST(test_pow_positive) {
-  double x = 2345634.45515314564, y = 12341234.5445488879;
+  double x = 0, y = 1;
   long double s21_result = s21_pow(x, y);
   long double math_result = pow(x, y);
 
@@ -148,7 +172,7 @@ START_TEST(test_pow_positive) {
 END_TEST
 
 START_TEST(test_pow_negative_1) {
-  double x = -1, y = 2;
+  double x = -1, y = -2;
   long double s21_result = s21_pow(x, y);
   long double math_result = pow(x, y);
 
@@ -157,17 +181,18 @@ START_TEST(test_pow_negative_1) {
 END_TEST
 
 START_TEST(test_pow_negative_2) {
-  double x = 2, y = -3;
-  long double s21_result = s21_pow(x, y);
-  long double math_result = pow(x, y);
+  double test[] = {-3, 3};
+  double test_1[] = {3, -3, 2, -4};
+  long double s21_result = s21_pow(test[_i], test_1[_i]);
+  long double math_result = pow(test[_i], test_1[_i]);
 
-  ck_assert_ldouble_eq(s21_result, math_result);
+  ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
 }
 END_TEST
 
 // s21_exp
 START_TEST(test_exp_positive) {
-  double x = 709;
+  double x = 17;
   long double s21_result = s21_exp(x);
   long double math_result = exp(x);
 
@@ -436,14 +461,14 @@ START_TEST(test_asin_ECase_2) {
 END_TEST
 
 // s21_atan
-START_TEST(test_atan_positive) {
+START_TEST(test_atan) {
   double x;
   long double s21_result;
   long double math_result;
 
-  x = 13.54;
-  s21_result = s21_atan(x);
-  math_result = atan(x);
+  double test[] = {-0.424465, 0.424465, 13.54};
+  s21_result = s21_atan(test[_i]);
+  math_result = atan(test[_i]);
   ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
 }
 END_TEST
@@ -451,6 +476,16 @@ END_TEST
 // Create the test suite
 Suite* s21_math_suite(void) {
   Suite* suite = suite_create("s21_math");
+
+  // test_nan
+  TCase* tc_nan = tcase_create("nan");
+  tcase_add_test(tc_nan, test_nan);
+  suite_add_tcase(suite, tc_nan);
+
+  // test_inf
+  TCase* tc_inf = tcase_create("inf");
+  tcase_add_test(tc_inf, test_inf);
+  suite_add_tcase(suite, tc_inf);
 
   // Create a test case for abs
   TCase* tc_abs = tcase_create("abs");
@@ -553,12 +588,11 @@ Suite* s21_math_suite(void) {
 
   // atan
   TCase* tc_atan = tcase_create("atan");
-  tcase_add_test(tc_atan, test_atan_positive);
+  tcase_add_test(tc_atan, test_atan);
   suite_add_tcase(suite, tc_atan);
 
   return suite;
 }
-
 
 // Run the test suite
 int main(void) {
@@ -573,4 +607,3 @@ int main(void) {
 
   return number_failed == 0 ? 0 : 1;
 }
-
