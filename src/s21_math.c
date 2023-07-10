@@ -123,7 +123,7 @@ long double s21_log(double x) {
     long double term = y;
     long double term_squared = y * y;
     long int n = 1;
-    while (s21_fabs(term) > EPSILON) {
+    while (s21_fabs(term) > 1e-16) {
       result += term;
       term *= term_squared * (2 * n - 1) / (2 * n + 1);  // Series expansions
       n++;
