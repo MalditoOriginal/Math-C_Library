@@ -91,8 +91,7 @@ long double s21_floor(double x) {
 
 // s21_exp
 long double s21_exp(double x) {
-  long double result = 1.0;
-  long double term = 1.0;
+  long double result = 1.0, term = 1.0;
 
   if (s21_isnan(x)) result = S21_NAN;  // Return NaN if x is NaN
   if (x >= 710) result = POS_INF;
@@ -109,28 +108,30 @@ long double s21_exp(double x) {
 
 // s21_log
 long double s21_log(double x) {
-  long double result = 0.0;
-  long double returnValue = 0;  // Declare variable for the return value
+  //long double result = 0.0;
+  //long double returnValue = 0;  // Declare variable for the return value
 
   if (s21_isnan(x))
-    returnValue = S21_NAN;  // Return NaN if x is NaN
+    return S21_NAN;  // Return NaN if x is NaN
   else if (x < 0)
-    returnValue = S21_NAN;
+    return S21_NAN;
   else if (x == 0)
-    returnValue = NEG_INF;
+    return NEG_INF;
   else {
-    long double y = (x - 1.0) / (x + 1.0);
-    long double term = y;
-    long double term_squared = y * y;
-    long int n = 1;
-    while (s21_fabs(term) > 1e-16) {
-      result += term;
-      term *= term_squared * (2 * n - 1) / (2 * n + 1);  // Series expansions
-      n++;
-    }
-    returnValue = 2.0 * result;
+  long double y = (x - 1.0) / (x + 1.0);
+  long double term = y;
+  long double termSquared = y * y;
+  long double result = term;  // Initialize result with the first term
+  long int n = 1;
+
+  while (s21_fabs(term) > 1e-16) {
+    term *= termSquared * (2 * n - 1) / (2 * n + 1);  // Series expansion
+    result += term;
+    n++;
   }
-  return returnValue;  // Return the final value
+
+  return 2.0 * result;
+}
 }
 
 // s21_sqrt
@@ -138,17 +139,13 @@ long double s21_sqrt(double x) {
   if (s21_isnan(x)) return S21_NAN;
 
   double result = x;  // Initial guess for the result
-  long int max_iterations = 100;
-  long int iteration = 0;
 
   if (x < 0) result = S21_NAN;
   // Newton's method
-  while (s21_fabs(result * result - x) > EPSILON &&
-         iteration < max_iterations) {
+  while (s21_fabs(result * result - x) > EPSILON ) {
     double root =
         0.5 * (result + x / result);  // Calculate the next approximation
     result = root;                    // Update the current approximation
-    iteration++;                      // Increment the iteration counter
   }
   return result;
 }

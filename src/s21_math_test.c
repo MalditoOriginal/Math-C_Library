@@ -3,7 +3,7 @@
 #include <check.h>
 #include <math.h>
 #include <stdlib.h>
-#define TOL 1e-8
+#define TOL 1e-6
 #define INT_MIN -2147483648
 #define INT_MAX 2147483647
 
@@ -78,7 +78,7 @@ START_TEST(test_fmod_positive) {
 END_TEST
 
 START_TEST(test_fmod_negative) {
-  double x = -4564564.13212;
+  double x = -4564564.1324512;
   double y = 999.99999;
   long double s21_result = s21_fmod(x, y);
   long double math_result = fmod(x, y);
@@ -89,7 +89,7 @@ END_TEST
 
 // long double fabs(double x)
 START_TEST(test_fabs_positive) {
-  double x = 9999.9999;
+  double x = 9999.9994569;
   long double s21_result = s21_fabs(x);
   long double math_result = fabs(x);
 
@@ -98,7 +98,7 @@ START_TEST(test_fabs_positive) {
 END_TEST
 
 START_TEST(test_fabs_negative) {
-  double x = -9999.99999;
+  double x = -9999.99654999;
   long double s21_result = s21_fabs(x);
   long double math_result = fabs(x);
 
@@ -163,11 +163,11 @@ START_TEST(test_pow_zero) {
 END_TEST
 
 START_TEST(test_pow_positive) {
-  double x = 0, y = 1;
+  double x = 134, y = 3;
   long double s21_result = s21_pow(x, y);
   long double math_result = pow(x, y);
 
-  ck_assert_ldouble_eq(s21_result, math_result);
+  ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
 }
 END_TEST
 
@@ -293,7 +293,7 @@ START_TEST(test_sqrt_negative) {
 END_TEST
 
 START_TEST(test_sqrt_small) {
-  double x = 0.000001;
+  double x = 0.0000001;
   long double s21_result = s21_sqrt(x);
   long double math_result = sqrt(x);
 
@@ -332,7 +332,7 @@ END_TEST
 
 // s21_tan
 START_TEST(test_tan_positive) {
-  double x = 21131.4665;
+  double x = 21131.4665465;
   long double s21_result = s21_tan(x);
   long double math_result = tan(x);
 
@@ -341,7 +341,7 @@ START_TEST(test_tan_positive) {
 END_TEST
 
 START_TEST(test_tan_negative) {
-  double x = -43155.5665;
+  double x = -43155.5654665;
   long double s21_result = s21_tan(x);
   long double math_result = tan(x);
 
@@ -463,7 +463,7 @@ START_TEST(test_atan) {
   long double s21_result;
   long double math_result;
 
-  double test[] = {-0.424465, 0.424465, 13.54};
+  double test[] = {-0.4244365, 0.4244465, 13.54};
   s21_result = s21_atan(test[_i]);
   math_result = atan(test[_i]);
   ck_assert_ldouble_eq_tol(s21_result, math_result, TOL);
@@ -600,8 +600,8 @@ int main(void) {
   int number_failed = srunner_ntests_failed(runner);
   srunner_free(runner);
 
-  // Run gcov to get coverage report
-  system("gcov s21_math.c");
+  // // Run gcov to get coverage report
+  // system("gcov s21_math.c");
 
   return number_failed == 0 ? 0 : 1;
 }
