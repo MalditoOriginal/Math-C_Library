@@ -67,67 +67,67 @@ Represents "Not-a-Number" (NaN).
 
 ### `s21_isnan`
 
-Description: Check if a given number is NaN (Not-a-Number).
+Check if a given number is NaN (Not-a-Number).
 
 ### `s21_abs`
 
-Description: Calculate the absolute value of an integer.
+Calculate the absolute value of an integer.
 
 ### `s21_fabs`
 
-Description: Calculate the absolute value of a floating-point number.
+Calculate the absolute value of a floating-point number.
 
 ### `s21_fmod`
 
-Description: Calculate the remainder of division of two floating-point numbers.
+Calculate the remainder of division of two floating-point numbers.
 
 ### `s21_ceil`
 
-Description: Round a number up to the nearest integer.
+Round a number up to the nearest integer.
 
 ### `s21_floor`
 
-Description: Round a number down to the nearest integer.
+Round a number down to the nearest integer.
 
 ### `s21_pow`
 
-Description: Calculate the power of a base raised to an exponent.
+Calculate the power of a base raised to an exponent.
 
 ### `s21_exp`
 
-Description: Calculate the exponential value of a number.
+Calculate the exponential value of a number.
 
 ### `s21_cos`
 
-Description: Calculate the cosine of an angle.
+Calculate the cosine of an angle.
 
 ### `s21_sin`
 
-Description: Calculate the sine of an angle.
+Calculate the sine of an angle.
 
 ### `s21_log`
 
-Description: Calculate the natural logarithm of a number.
+Calculate the natural logarithm of a number.
 
 ### `s21_sqrt`
 
-Description: Calculate the square root of a number.
+Calculate the square root of a number.
 
 ### `s21_tan`
 
-Description: Calculate the tangent of an angle.
+Calculate the tangent of an angle.
 
 ### `s21_acos`
 
-Description: Calculate the arccosine of a number.
+Calculate the arccosine of a number.
 
 ### `s21_asin`
-
-Description: Calculate the arcsine of a number.
+               
+Calculate the arcsine of a number.
 
 ### `s21_atan`
 
-Description: Calculate the arctangent of a number.
+Calculate the arctangent of a number.
 
 ## Usage
 
