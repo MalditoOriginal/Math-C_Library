@@ -1,6 +1,5 @@
 # Math-C_Library
 
-```markdown
 ## Math Library - A C Library for Mathematical Operations
 
 The S21 Math Library is a comprehensive C library that provides a range of mathematical functions and constants for your C programs. This library is designed to help you perform various mathematical calculations, from basic operations to more complex trigonometric and exponential functions.
@@ -152,5 +151,3 @@ Contributions to the S21 Math Library are welcome! If you have suggestions, impr
 ## License
 
 The S21 Math Library is licensed under the [MIT License](LICENSE). You are free to use, modify, and distribute it as needed.
-
-```
