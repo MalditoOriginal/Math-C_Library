@@ -67,7 +67,7 @@ Represents "Not-a-Number" (NaN).
 
 ### `s21_isnan`
 
-   Check if a given number is NaN (Not-a-Number).
+- Check if a given number is NaN (Not-a-Number).
 
 ### `s21_abs`
 
