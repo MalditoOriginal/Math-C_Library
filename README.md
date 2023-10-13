@@ -71,63 +71,63 @@ Represents "Not-a-Number" (NaN).
 
 ### `s21_abs`
 
-Calculate the absolute value of an integer.
+- Calculate the absolute value of an integer.
 
 ### `s21_fabs`
 
-Calculate the absolute value of a floating-point number.
+- Calculate the absolute value of a floating-point number.
 
 ### `s21_fmod`
 
-Calculate the remainder of division of two floating-point numbers.
+- Calculate the remainder of division of two floating-point numbers.
 
 ### `s21_ceil`
 
-Round a number up to the nearest integer.
+- Round a number up to the nearest integer.
 
 ### `s21_floor`
 
-Round a number down to the nearest integer.
+- Round a number down to the nearest integer.
 
 ### `s21_pow`
 
-Calculate the power of a base raised to an exponent.
+- Calculate the power of a base raised to an exponent.
 
 ### `s21_exp`
 
-Calculate the exponential value of a number.
+- Calculate the exponential value of a number.
 
 ### `s21_cos`
 
-Calculate the cosine of an angle.
+- Calculate the cosine of an angle.
 
 ### `s21_sin`
 
-Calculate the sine of an angle.
+- Calculate the sine of an angle.
 
 ### `s21_log`
 
-Calculate the natural logarithm of a number.
+- Calculate the natural logarithm of a number.
 
 ### `s21_sqrt`
 
-Calculate the square root of a number.
+- Calculate the square root of a number.
 
 ### `s21_tan`
 
-Calculate the tangent of an angle.
+- Calculate the tangent of an angle.
 
 ### `s21_acos`
 
-Calculate the arccosine of a number.
+- Calculate the arccosine of a number.
 
 ### `s21_asin`
                
-Calculate the arcsine of a number.
+- Calculate the arcsine of a number.
 
 ### `s21_atan`
 
-Calculate the arctangent of a number.
+- Calculate the arctangent of a number.
 
 ## Usage
 
